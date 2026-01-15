@@ -1,0 +1,23 @@
+{
+    "id": "693c628d93235",
+    "message": "test4",
+    "movements": [
+        {
+            "angle": 78,
+            "duration": 120
+        },
+        {
+            "angle": 89,
+            "duration": 100
+        },
+        {
+            "angle": 23,
+            "duration": 156
+        },
+        {
+            "angle": 89,
+            "duration": 120
+        }
+    ],
+    "created_at": "2025-12-12T19:44:29+01:00"
+}

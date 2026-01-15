@@ -1,0 +1,14 @@
+{
+    "id": "3",
+    "message": "test4",
+    "movements": [
+        {
+            "angle": "17",
+            "duration": "1400"
+        },
+        {
+            "angle": "180",
+            "duration": "234"
+        }
+    ]
+}
