@@ -7,9 +7,7 @@ $angles    = $_POST['angle'];
 $durations = $_POST['duration'];
 
 $pdo = new PDO(
-    'mysql:host=' . config::HOST . ';dbname=' . config::DBNAME . ';charset=utf8',
-    config::USER,
-    config::PASSWORD
+    'mysql:host=' . config::HOST . ';dbname=' . config::DBNAME . ';charset=utf8', config::USER, config::PASSWORD
 );
 
 

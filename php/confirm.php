@@ -71,7 +71,7 @@ $jsonFile = "../json/" . $id . ".json";
                 Voir le JSON
             </a>
         <?php else: ?>
-            <div class="alert alert-danger">Aucun fichier JSON trouvé.</div>
+            <div class="alert alert-danger"> Aucun fichier JSON trouvé.</div>
         <?php endif; ?>
 
         <br>

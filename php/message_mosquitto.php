@@ -6,7 +6,6 @@ $message = "Esp32 connecté";
 
 // ===== Chemin complet de mosquitto_pub.exe =====
 $mosquittoPath = '"C:\\Program Files\\mosquitto\\mosquitto_pub.exe"';
-
 // ===== Construction de la commande =====
 $command = "$mosquittoPath -h $broker -t $topic -m \"$message\" 2>&1";
 

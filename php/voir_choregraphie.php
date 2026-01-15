@@ -77,7 +77,6 @@ $jsonFile = "../json/" . $id . ".json";
         <a href="index.php" class="btn btn-secondary"><-- Retour à l'accueil</a>
     </div>
 </div>
-
 <?php
 include "footer.php";
 ?>

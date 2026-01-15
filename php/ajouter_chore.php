@@ -42,7 +42,7 @@ include 'header.php';
                 <div class="movement p-3 mb-3">
                     <div class="row">
                         <div class="col-md-6">
-                            <label class="form-label">Angle (0 à 180°)</label>
+                            <label class="form-label"> Angle (0 à 180°)</label>
                             <input type="number" class="form-control" name="angle[]" min="0" max="180" required placeholder="ex : 45">
                         </div>
 

@@ -4,10 +4,7 @@ include "config.php";
 
 // Connexion PDO
 $pdo = new PDO(
-        'mysql:host=' . config::HOST . ';dbname=' . config::DBNAME . ';charset=utf8',
-        config::USER,
-        config::PASSWORD,
-        [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
+        'mysql:host=' . config::HOST . ';dbname=' . config::DBNAME . ';charset=utf8', config::USER, config::PASSWORD, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
 );
 
 // Récupération des chorégraphies

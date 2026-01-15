@@ -1,5 +1,6 @@
 <?php
 
+
 class config{
     const HOST = 'localhost';
     const DBNAME = 'projet_slam';
