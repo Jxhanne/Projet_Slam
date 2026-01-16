@@ -9,11 +9,11 @@
 
 // ---------- CONFIG WIFI ----------
 const char* ssid = "WIFI_LABO";
-const char* password = "EPSIWIS2018!";
+const char* password = "EpsiWis2018!";
 
 // ---------- MQTT ----------
 const char* mqtt_server = "172.16.118.56";
-const char* mqtt_topic  = "labo/esp32";
+const char* mqtt_topic  = "bisik";
 
 // ---------- Servo ----------
 Servo servo;

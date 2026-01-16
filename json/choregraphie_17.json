@@ -1,0 +1,17 @@
+{
+    "chore_id": 17,
+    "messages": [
+        {
+            "message": "dekcz",
+            "duree": 1345
+        }
+    ],
+    "mouvements": [
+        {
+            "angle": 89,
+            "duree": 1567
+        }
+    ],
+    "son": "Robot1.mp3",
+    "volume": 50
+}

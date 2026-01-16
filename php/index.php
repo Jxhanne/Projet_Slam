@@ -4,7 +4,10 @@ include "config.php";
 
 // Connexion PDO
 $pdo = new PDO(
-        'mysql:host=' . config::HOST . ';dbname=' . config::DBNAME . ';charset=utf8', config::USER, config::PASSWORD, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
+        'mysql:host=' . config::HOST . ';dbname=' . config::DBNAME . ';charset=utf8',
+        config::USER,
+        config::PASSWORD,
+        [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
 );
 
 // Récupération des chorégraphies
@@ -35,15 +38,27 @@ $choreos = $req->fetchAll(PDO::FETCH_ASSOC);
         <div class="list-group">
             <?php foreach ($choreos as $c): ?>
                 <div class="list-group-item d-flex justify-content-between align-items-center">
+
                     <div>
+                        <strong>Chorégraphie #<?= htmlspecialchars($c['id']) ?></strong><br>
                         <small class="text-muted">
                             Créée le : <?= htmlspecialchars($c['date_creation']) ?>
                         </small>
                     </div>
 
-                    <a href="voir_choregraphie.php?id=<?= $c['id']; ?>" class="btn btn-outline-secondary">
-                         Voir détails
-                    </a>
+                    <div class="btn-group">
+                        <a href="voir_choregraphie.php?id=<?= $c['id']; ?>"
+                           class="btn btn-outline-secondary">
+                            Voir détails
+                        </a>
+
+                        <a href="lancer_choregraphie.php?id=<?= $c['id']; ?>"
+                           class="btn btn-success"
+                           onclick="return confirm('Lancer cette chorégraphie sur le robot ?');">
+                            Lancer
+                        </a>
+                    </div>
+
                 </div>
             <?php endforeach; ?>
         </div>
@@ -51,6 +66,4 @@ $choreos = $req->fetchAll(PDO::FETCH_ASSOC);
 
 </div>
 
-<?php
-include "footer.php";
-?>
+<?php include "footer.php"; ?>

@@ -70,9 +70,10 @@ $data = [
 ];
 
 $json = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
-$path = __DIR__ . '.../json/';
-if (!is_dir($path)) mkdir($path, 0777, true);
-file_put_contents($path . "choregraphie_$chore_id.json", $json);
 
-header('Location: ../index.php?success=1');
-exit;
+// Chemin correct vers le dossier json existant
+$path = __DIR__ . '/../../json/';
+
+file_put_contents($path . "choregraphie_$chore_id.json", $json);
+Exit;
+
