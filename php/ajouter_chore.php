@@ -6,13 +6,16 @@ include 'header.php';
 
 <style>
     body {
-        background-color: #f5f5f5; /* gris clair */
+        background-color: #4b4b4b;
     }
 
+    h1 {
+        color: #ffffff;
+    }
     .card {
         background-color: #ffffff;
         border-radius: 12px;
-        border: 1px solid #ddd;
+        border: 1px solid rgba(0, 73, 255, 0.66);
     }
 
     .movement {
@@ -29,32 +32,49 @@ include 'header.php';
     <div class="card shadow p-4">
         <form action="actions/creation_chore.php" method="POST">
 
-            <!-- Message -->
-            <div class="mb-4">
-                <label class="form-label">Message à afficher :</label>
-                <input type="text" class="form-control" name="message" required placeholder="Entrez un message...">
-            </div>
+            <!-- MESSAGES -->
+            <h4>Message à afficher</h4>
+            <p class="text-muted">Ajoutez autant de messages que vous voulez.</p>
 
-            <h4>Mouvements du bras</h4>
-            <p class="text-muted">Ajoutez autant de mouvements que vous voulez.</p>
-
-            <div id="movement-container">
+            <div id="message-container">
                 <div class="movement p-3 mb-3">
                     <div class="row">
                         <div class="col-md-6">
-                            <label class="form-label"> Angle (0 à 180°)</label>
-                            <input type="number" class="form-control" name="angle[]" min="0" max="180" required placeholder="ex : 45">
+                            <label class="form-label">Message</label>
+                            <textarea class="form-control" name="message[]" rows="2" required placeholder="Écris ton message ici"></textarea>
                         </div>
 
                         <div class="col-md-6">
                             <label class="form-label">Durée (ms)</label>
-                            <input type="number" class="form-control" name="duration[]" min="100" required placeholder="ex : 1500">
+                            <input type="number" class="form-control" name="duree_message[]" min="100" required placeholder="ex : 1500">
                         </div>
                     </div>
                 </div>
             </div>
 
-            <button type="button" class="btn btn-secondary mb-3" onclick="addMovement()">+ Ajouter un mouvement</button>
+            <button type="button" class="btn btn-secondary mb-3" onclick="addMovementmessage()">+ Ajouter un message</button>
+
+            <!-- MOUVEMENTS -->
+            <h4>Mouvements du bras</h4>
+            <p class="text-muted">Ajoutez autant de mouvements que vous voulez.</p>
+
+            <div id="angle-container">
+                <div class="movement p-3 mb-3">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="form-label">Angle (0 à 180°)</label>
+                            <input type="number" class="form-control" name="angle[]" min="0" max="180" required placeholder="ex : 45">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Durée (ms)</label>
+                            <input type="number" class="form-control" name="duree_angle[]" min="100" required placeholder="ex : 1500">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" class="btn btn-secondary mb-3" onclick="addMovementangle()">+ Ajouter un mouvement</button>
 
             <br>
 
@@ -65,12 +85,34 @@ include 'header.php';
 </div>
 
 <script>
-    function addMovement() {
-        const container = document.getElementById("movement-container");
-        const newMovement = document.createElement("div");
-        newMovement.classList.add("movement", "p-3", "mb-3");
+    function addMovementmessage() {
+        const container = document.getElementById("message-container");
+        const div = document.createElement("div");
+        div.classList.add("movement", "p-3", "mb-3");
 
-        newMovement.innerHTML = `
+        div.innerHTML = `
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="form-label">Message</label>
+                    <textarea class="form-control" name="message[]" rows="2" required placeholder="Écris ton message ici"></textarea>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Durée (ms)</label>
+                    <input type="number" class="form-control" name="duree_message[]" min="100" required placeholder="ex : 2000">
+                </div>
+            </div>
+        `;
+
+        container.appendChild(div);
+    }
+
+    function addMovementangle() {
+        const container = document.getElementById("angle-container");
+        const div = document.createElement("div");
+        div.classList.add("movement", "p-3", "mb-3");
+
+        div.innerHTML = `
             <div class="row">
                 <div class="col-md-6">
                     <label class="form-label">Angle (0 à 180°)</label>
@@ -79,12 +121,12 @@ include 'header.php';
 
                 <div class="col-md-6">
                     <label class="form-label">Durée (ms)</label>
-                    <input type="number" class="form-control" name="duration[]" min="100" required placeholder="ex : 2000">
+                    <input type="number" class="form-control" name="duree_angle[]" min="100" required placeholder="ex : 2000">
                 </div>
             </div>
         `;
 
-        container.appendChild(newMovement);
+        container.appendChild(div);
     }
 </script>
 

@@ -36,9 +36,6 @@ $choreos = $req->fetchAll(PDO::FETCH_ASSOC);
             <?php foreach ($choreos as $c): ?>
                 <div class="list-group-item d-flex justify-content-between align-items-center">
                     <div>
-                        <h5 class="mb-1">
-                            <?= htmlspecialchars($c['message']) ?>
-                        </h5>
                         <small class="text-muted">
                             Créée le : <?= htmlspecialchars($c['date_creation']) ?>
                         </small>

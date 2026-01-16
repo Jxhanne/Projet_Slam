@@ -10,7 +10,7 @@ $pdo = new PDO(
     [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
 );
 
-// Récupération ID
+// Récupération id
 $id = $_GET['id'] ?? '';
 
 if ($id === '') {
@@ -19,7 +19,7 @@ if ($id === '') {
     exit;
 }
 
-// Récupérer la chorégraphie
+// Récupère la chorégraphie
 $req = $pdo->prepare("SELECT * FROM choregraphies WHERE id = ?");
 $req->execute([$id]);
 $choreo = $req->fetch(PDO::FETCH_ASSOC);
@@ -30,7 +30,7 @@ if (!$choreo) {
     exit;
 }
 
-// Récupérer les mouvements
+// Récupère les mouvements
 $req2 = $pdo->prepare("SELECT * FROM mouvements WHERE chore_id = ?");
 $req2->execute([$id]);
 $mouvements = $req2->fetchAll(PDO::FETCH_ASSOC);
@@ -39,13 +39,12 @@ $mouvements = $req2->fetchAll(PDO::FETCH_ASSOC);
 $jsonFile = "../json/" . $id . ".json";
 ?>
 
-<!-- BOOTSTRAP -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
 
 <div class="container mt-5">
     <div class="card shadow p-4">
 
-        <h1 class="mb-3">Chorégraphie : <?= htmlspecialchars($choreo['message']) ?></h1>
+        <h1 class="mb-3">Chorégraphie
 
         <p><strong>ID :</strong> <?= htmlspecialchars($choreo['id']) ?></p>
         <p><strong>Date :</strong> <?= htmlspecialchars($choreo['date_creation']) ?></p>
@@ -58,7 +57,7 @@ $jsonFile = "../json/" . $id . ".json";
                 <?php foreach ($mouvements as $m): ?>
                     <li class="list-group-item">
                         Angle : <?= (int)$m['angle'] ?>° —
-                        Durée : <?= (int)$m['duration'] ?> ms
+                        Durée : <?= (int)$m['duree'] ?> ms
                     </li>
                 <?php endforeach; ?>
             </ul>

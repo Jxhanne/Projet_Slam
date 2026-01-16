@@ -1,50 +1,63 @@
 <?php
-include '../header.php';
-include "../config.php";
-
-$message   = $_POST['message'];
-$angles    = $_POST['angle'];
-$durations = $_POST['duration'];
-
+include_once "../config.php";
 $pdo = new PDO(
-    'mysql:host=' . config::HOST . ';dbname=' . config::DBNAME . ';charset=utf8', config::USER, config::PASSWORD
+    'mysql:host=' . config::HOST . ';dbname=' . config::DBNAME . ';charset=utf8',
+    config::USER,
+    config::PASSWORD,
+    [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
 );
-
-
-$sql = "INSERT INTO choregraphies (message) VALUES ('$message')";
-$pdo->query($sql);
-
-// Récupération de l'ID de la chore créée
+$stmt = $pdo->prepare("INSERT INTO choregraphies (date_creation) VALUES (NOW())");
+$stmt->execute();
 $chore_id = $pdo->lastInsertId();
+$messages_json = [];
 
-foreach ($angles as $i => $angle) {
-    $duration = $durations[$i];
+if (!empty($_POST['message']) && !empty($_POST['duree_message'])) {
 
-    $sql = "INSERT INTO mouvements (chore_id, angle, duration)
-            VALUES ($chore_id, $angle, $duration)";
-    $pdo->query($sql);
+    $stmtMessage = $pdo->prepare("INSERT INTO messages (chore_id, message, duree)VALUES (:chore_id, :message, :duree)");
+
+    foreach ($_POST['message'] as $index => $msg) {
+
+        $message = $msg;
+        $duree   = $_POST['duree_message'][$index] ?? null;
+
+        if (!empty($message) && is_numeric($duree)) {
+
+            $stmtMessage->bindValue(':chore_id', $chore_id, PDO::PARAM_INT);
+            $stmtMessage->bindValue(':message',  $message,  PDO::PARAM_STR);
+            $stmtMessage->bindValue(':duree',    $duree,    PDO::PARAM_INT);
+            $stmtMessage->execute();
+
+            $messages_json[] = [
+                'message' => $message,
+                'duree'   => (int)$duree
+            ];
+        }
+    }
 }
+$mouvements_json = [];
 
-// CRÉATION DU JSON
-$data = [
-    "id" => $chore_id,
-    "message" => $message,
-    "movements" => []
-];
+if (!empty($_POST['angle']) && !empty($_POST['duree_angle'])) {
 
-foreach ($angles as $i => $angle) {
-    $data["movements"][] = [
-        "angle" => $angle,
-        "duration" => $durations[$i]
-    ];
+    $stmtMouvement = $pdo->prepare("INSERT INTO mouvements (chore_id, angle, duree) VALUES (:chore_id, :angle, :duree)");
+
+    foreach ($_POST['angle'] as $index => $ang) {
+
+        $angle = $ang;
+        $duree = $_POST['duree_angle'][$index] ?? null;
+
+        if (is_numeric($angle) && is_numeric($duree)) {
+
+            $stmtMouvement->bindValue(':chore_id', $chore_id, PDO::PARAM_INT);
+            $stmtMouvement->bindValue(':angle',    $angle,    PDO::PARAM_INT);
+            $stmtMouvement->bindValue(':duree',    $duree,    PDO::PARAM_INT);
+            $stmtMouvement->execute();
+
+            $mouvements_json[] = [
+                'angle' => (int)$angle,
+                'duree' => (int)$duree
+            ];
+        }
+    }
 }
-
-$json_path = __DIR__ . "/../../json/" . $chore_id . ".json";
-file_put_contents($json_path, json_encode($data, JSON_PRETTY_PRINT));
-
-
-header("Location: ../confirm.php?id=" . $chore_id);
+header('Location: ../index.php?success=1');
 exit;
-
-include "../footer.php";
-?>
