@@ -111,7 +111,7 @@ include 'header.php';
 
                     <div class="col-md-6">
                         <label for="range4" class="form-label">Volume du son choisi :</label>
-                        <input type="range" class="form-range" min="0" max="100" value="50" id="range4">
+                        <input type="range" class="form-range" min="0" max="100" name="volume" id="range4">
                         <output for="range4" id="rangeValue" aria-hidden="true"></output>
                     </div>
                 </div>
@@ -145,19 +145,6 @@ include 'header.php';
         </form>
     </div>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
 <script>
     function addMovementmessage() {
         const container = document.getElementById("message-container");

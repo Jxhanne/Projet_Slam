@@ -57,7 +57,19 @@ $choreos = $req->fetchAll(PDO::FETCH_ASSOC);
                            onclick="return confirm('Lancer cette chorégraphie sur le robot ?');">
                             Lancer
                         </a>
+
+                        <a href="actions/supprimer_chore.php?id=<?= $c['id']; ?>"
+                           class="btn btn-danger"
+                           onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette chorégraphie ?');">
+                            Supprimer
+                        </a>
+
+                        <!-- Bouton Afficher Webhook -->
+                        <button class="btn btn-info" onclick="alert('Webhook : https://172.16.118.56/lancer_choregraphie.php?id=<?= $c['id']; ?>')">
+                            Afficher Webhook
+                        </button>
                     </div>
+
 
                 </div>
             <?php endforeach; ?>

@@ -53,19 +53,28 @@ if (!empty($_POST['angle']) && !empty($_POST['duree_angle'])) {
 $son = $_POST['son'] ?? null;
 $volume = isset($_POST['volume']) ? (int)$_POST['volume'] : 50;
 
+// Extraire le numéro du titre si le fichier existe
+$son_num = null;
 if (!empty($son)) {
+    if (preg_match('/Robot(\d+)\.mp3/i', $son, $matches)) {
+        $son_num = (int)$matches[1]; // 1, 2, 3, ...
+    } else {
+        $son_num = 0; // ou null si pas trouvé
+    }
+
     $stmtSon = $pdo->prepare("INSERT INTO sons (chore_id, son, volume) VALUES (:chore_id, :son, :volume)");
     $stmtSon->bindValue(':chore_id', $chore_id, PDO::PARAM_INT);
-    $stmtSon->bindValue(':son', $son, PDO::PARAM_STR);
+    $stmtSon->bindValue(':son', $son, PDO::PARAM_STR); // pour la DB on garde le nom original
     $stmtSon->bindValue(':volume', $volume, PDO::PARAM_INT);
     $stmtSon->execute();
 }
 
+// Construire le JSON
 $data = [
     'chore_id'   => (int)$chore_id,
     'messages'   => $messages_json,
     'mouvements' => $mouvements_json,
-    'son'        => $son,
+    'son'        => $son_num,  // ici on envoie le numéro du titre
     'volume'     => $volume
 ];
 
@@ -73,7 +82,8 @@ $json = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 
 // Chemin correct vers le dossier json existant
 $path = __DIR__ . '/../../json/';
-
 file_put_contents($path . "choregraphie_$chore_id.json", $json);
-Exit;
+
+header("Location: ../index.php");
+exit;
 

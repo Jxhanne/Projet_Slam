@@ -19,23 +19,28 @@ $jsonContent = json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICOD
 $tempFile = tempnam(sys_get_temp_dir(), 'mqtt_');
 file_put_contents($tempFile, $jsonContent);
 
-// Paramètres MQTT
-$broker = "172.16.118.56";
-$topic  = "bisik";
+// ===== Paramètres MQTT =====
+$broker       = "mqtt.latetedanslatoile.fr";
+$port         = 1883;
+$topic        = "bisikJr";
+$username     = "Epsi";
+$password     = "EpsiWis2018!";
 $mosquittoPath = '"C:\\Program Files\\mosquitto\\mosquitto_pub.exe"';
 
-// Publie le fichier avec -f
-$command = "$mosquittoPath -h $broker -t $topic -f \"$tempFile\" 2>&1";
+// ===== Prépare la commande =====
+$command = "$mosquittoPath -h $broker -p $port -u $username -P $password -t $topic -f \"$tempFile\" 2>&1";
 
-// Exécution
+// ===== Exécution =====
 exec($command, $output, $status);
 
-// Supprimer le fichier temporaire
+// ===== Supprimer le fichier temporaire =====
 unlink($tempFile);
 
+// ===== Vérification =====
 if ($status === 0) {
     header("Location: index.php?success=1");
     exit;
 } else {
     echo "<pre>Erreur MQTT :\n" . implode("\n", $output) . "</pre>";
 }
+?>
