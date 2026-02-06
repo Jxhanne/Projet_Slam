@@ -65,7 +65,7 @@ $choreos = $req->fetchAll(PDO::FETCH_ASSOC);
                         </a>
 
                         <!-- Bouton Afficher Webhook -->
-                        <button class="btn btn-info" onclick="alert('Webhook : https://172.16.118.56/lancer_choregraphie.php?id=<?= $c['id']; ?>')">
+                        <button class="btn btn-info" onclick="alert('Webhook : http://172.16.118.56/lancer_choregraphie.php?id=<?= $c['id']; ?>')">
                             Afficher Webhook
                         </button>
                     </div>

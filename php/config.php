@@ -7,3 +7,5 @@ class config{
     const USER = 'slam';
     const PASSWORD = '1234';
 }
+
+?>

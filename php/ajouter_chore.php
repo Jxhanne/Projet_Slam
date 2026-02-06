@@ -77,7 +77,7 @@ include 'header.php';
             <button type="button" class="btn btn-secondary mb-3" onclick="addMovementangle()">+ Ajouter un mouvement</button>
 
             <br>
-
+            <!-- SON -->
             <h4>Son de la notification</h4>
             <p class="text-muted">Choisir le son que vous voulez</p>
 

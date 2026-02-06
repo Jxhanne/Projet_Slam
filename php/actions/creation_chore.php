@@ -18,9 +18,9 @@ if (!empty($_POST['message']) && !empty($_POST['duree_message'])) {
         $message = $msg;
         $duree   = $_POST['duree_message'][$index] ?? null;
         if (!empty($message) && is_numeric($duree)) {
-            $stmtMessage->bindValue(':chore_id', $chore_id, PDO::PARAM_INT);
-            $stmtMessage->bindValue(':message',  $message,  PDO::PARAM_STR);
-            $stmtMessage->bindValue(':duree',    $duree,    PDO::PARAM_INT);
+            $stmtMessage->bindParam(':chore_id', $chore_id, PDO::PARAM_INT);
+            $stmtMessage->bindParam(':message',  $message,  PDO::PARAM_STR);
+            $stmtMessage->bindParam(':duree',    $duree,    PDO::PARAM_INT);
             $stmtMessage->execute();
 
             $messages_json[] = [
@@ -37,9 +37,9 @@ if (!empty($_POST['angle']) && !empty($_POST['duree_angle'])) {
         $angle = $ang;
         $duree = $_POST['duree_angle'][$index] ?? null;
         if (is_numeric($angle) && is_numeric($duree)) {
-            $stmtMouvement->bindValue(':chore_id', $chore_id, PDO::PARAM_INT);
-            $stmtMouvement->bindValue(':angle',    $angle,    PDO::PARAM_INT);
-            $stmtMouvement->bindValue(':duree',    $duree,    PDO::PARAM_INT);
+            $stmtMouvement->bindParam(':chore_id', $chore_id, PDO::PARAM_INT);
+            $stmtMouvement->bindParam(':angle',    $angle,    PDO::PARAM_INT);
+            $stmtMouvement->bindParam(':duree',    $duree,    PDO::PARAM_INT);
             $stmtMouvement->execute();
 
             $mouvements_json[] = [
@@ -53,19 +53,19 @@ if (!empty($_POST['angle']) && !empty($_POST['duree_angle'])) {
 $son = $_POST['son'] ?? null;
 $volume = isset($_POST['volume']) ? (int)$_POST['volume'] : 50;
 
-// Extraire le numéro du titre si le fichier existe
+// Extraire le numéro du son si le fichier existe
 $son_num = null;
 if (!empty($son)) {
     if (preg_match('/Robot(\d+)\.mp3/i', $son, $matches)) {
-        $son_num = (int)$matches[1]; // 1, 2, 3, ...
+        $son_num = (int)$matches[1];
     } else {
-        $son_num = 0; // ou null si pas trouvé
+        $son_num = 0;
     }
 
     $stmtSon = $pdo->prepare("INSERT INTO sons (chore_id, son, volume) VALUES (:chore_id, :son, :volume)");
-    $stmtSon->bindValue(':chore_id', $chore_id, PDO::PARAM_INT);
-    $stmtSon->bindValue(':son', $son, PDO::PARAM_STR); // pour la DB on garde le nom original
-    $stmtSon->bindValue(':volume', $volume, PDO::PARAM_INT);
+    $stmtSon->bindParam(':chore_id', $chore_id, PDO::PARAM_INT);
+    $stmtSon->bindParam(':son', $son, PDO::PARAM_STR); // Dans la bdd on insert le nom du son
+    $stmtSon->bindParam(':volume', $volume, PDO::PARAM_INT);
     $stmtSon->execute();
 }
 
@@ -74,7 +74,7 @@ $data = [
     'chore_id'   => (int)$chore_id,
     'messages'   => $messages_json,
     'mouvements' => $mouvements_json,
-    'son'        => $son_num,  // ici on envoie le numéro du titre
+    'son'        => $son_num,  // On envoie le numéro du son
     'volume'     => $volume
 ];
 
