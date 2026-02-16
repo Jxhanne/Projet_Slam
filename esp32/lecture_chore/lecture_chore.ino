@@ -7,13 +7,14 @@
 #include <DFRobotDFPlayerMini.h>
 
 // ===== WIFI =====
-const char* ssid = "WIFI_LABO";
-const char* password = "EpsiWis2018!";
+const char* ssid = "Livebox-5AE0";
+const char* password = "Johanne44";
 
 // ===== MQTT =====
-const char* mqtt_server = "172.16.118.56";
-const int mqtt_port = 1883;
-const char* mqtt_topic = "bisikJr";
+const char* mqtt_server = "mqtt.latetedanslatoile.fr";
+const char* mqtt_user   = "Epsi";
+const char* mqtt_pass   = "EpsiWis2018!";
+const char* mqtt_topic  = "bisikJr";
 
 // ===== SERVO =====
 Servo servo;
@@ -40,9 +41,16 @@ void callback(char* topic, byte* payload, unsigned int length) {
     json += (char)payload[i];
   }
 
-  DynamicJsonDocument doc(2048);
-  if (deserializeJson(doc, json)) return;
+  Serial.println("\nJSON reçu :");
+  Serial.println(json);
 
+  DynamicJsonDocument doc(2048);
+  if (deserializeJson(doc, json)) {
+    Serial.println("Erreur JSON");
+    return;
+  }
+
+  // --- OLED ---
   if (doc.containsKey("messages")) {
     for (JsonObject msg : doc["messages"].as<JsonArray>()) {
       display.clearDisplay();
@@ -55,6 +63,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
     }
   }
 
+  // --- SERVO ---
   if (doc.containsKey("mouvements")) {
     for (JsonObject mv : doc["mouvements"].as<JsonArray>()) {
       servo.write(mv["angle"]);
@@ -62,12 +71,16 @@ void callback(char* topic, byte* payload, unsigned int length) {
     }
   }
 
+  // --- SON ---
   if (doc.containsKey("son")) {
     int num = doc["son"];
     int volume = doc["volume"] | 20;
+
     if (num >= 1 && num <= 5) {
       dfPlayer.volume(volume);
+      delay(100);
       dfPlayer.play(num);
+      delay(300);
     }
   }
 }
@@ -75,9 +88,13 @@ void callback(char* topic, byte* payload, unsigned int length) {
 // ===== MQTT RECONNECT =====
 void reconnect() {
   while (!client.connected()) {
-    if (client.connect("ESP32_BISIK")) {
+    Serial.print("Connexion MQTT...");
+    if (client.connect("ESP32_BISIK", mqtt_user, mqtt_pass)) {
+      Serial.println(" OK");
       client.subscribe(mqtt_topic);
     } else {
+      Serial.print(" échec rc=");
+      Serial.println(client.state());
       delay(2000);
     }
   }
@@ -87,12 +104,14 @@ void reconnect() {
 void setup() {
   Serial.begin(115200);
 
+  // Servo
   ESP32PWM::allocateTimer(0);
   servo.setPeriodHertz(50);
   servo.attach(servoPin, 500, 2400);
 
+  // OLED
   Wire.begin(OLED_SDA, OLED_SCL);
-  display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
+  if (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) while (true);
   display.clearDisplay();
   display.setTextSize(2);
   display.setTextColor(SSD1306_WHITE);
@@ -100,15 +119,26 @@ void setup() {
   display.println("READY");
   display.display();
 
+  // DFPlayer
   Serial2.begin(9600, SERIAL_8N1, 16, 17);
   delay(1500);
-  dfPlayer.begin(Serial2);
-  dfPlayer.volume(20);
+  if (!dfPlayer.begin(Serial2)) {
+    Serial.println("DFPlayer NON détecté");
+  } else {
+    dfPlayer.volume(20);
+  }
 
+  // WiFi
   WiFi.begin(ssid, password);
-  while (WiFi.status() != WL_CONNECTED) delay(500);
+  Serial.print("WiFi");
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println(" connecté");
 
-  client.setServer(mqtt_server, mqtt_port);
+  // MQTT
+  client.setServer(mqtt_server, 1883);
   client.setCallback(callback);
 }
 

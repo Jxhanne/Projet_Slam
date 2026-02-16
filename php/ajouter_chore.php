@@ -88,7 +88,7 @@ include 'header.php';
                         <select class="form-select" name="son" required>
                             <option value="">-- Sélectionnez une piste --</option>
                             <?php
-                            $dir = __DIR__ . '/../sons/'; // dossier où sont stockés les fichiers audio
+                            $dir = __DIR__ . '/sons/'; // dossier où sont stockés les fichiers audio
                             if (is_dir($dir)) {
                                 $files = scandir($dir);
                                 foreach ($files as $file) {
@@ -133,7 +133,7 @@ include 'header.php';
 
                 selectSon.addEventListener('change', function() {
                     if (this.value) {
-                        player.src = '../sons/' + this.value;
+                        player.src = '/sons/' + this.value;
                         player.load();
                     }
                 });
