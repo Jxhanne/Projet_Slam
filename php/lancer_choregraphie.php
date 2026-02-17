@@ -5,6 +5,12 @@ include "config.php";
 use PhpMqtt\Client\MqttClient;
 use PhpMqtt\Client\ConnectionSettings;
 
+$pdo = new PDO(
+    'mysql:host=' . config::HOST . ';dbname=' . config::DBNAME . ';charset=utf8',
+    config::USER,
+    config::PASSWORD
+);
+
 if (!isset($_GET['id'])) {
     die("ID de chorégraphie manquant");
 }
@@ -14,7 +20,31 @@ if ($id <= 0) {
     die("ID invalide");
 }
 
-// lecture du fichier json
+// On fait attention aux horaires
+$sql = "SELECT * FROM reglages LIMIT 1";
+$req = $pdo->prepare($sql);
+$req->execute();
+$reglage = $req->fetch(PDO::FETCH_ASSOC);
+
+$heure = date('H:i:s');
+$jour  = date('N');
+
+if ($jour >= 6) {
+
+    $autorise = ($heure >= $reglage['debut_weekend']
+        && $heure <= $reglage['fin_weekend']);
+
+} else {
+
+    $autorise = ($heure >= $reglage['debut_semaine']
+        && $heure <= $reglage['fin_semaine']);
+}
+
+if (!$autorise) {
+    header("Location: index.php?inactive=1");
+    exit;
+}
+
 $jsonFile = __DIR__ . "/../json/choregraphie_$id.json";
 
 if (!file_exists($jsonFile)) {

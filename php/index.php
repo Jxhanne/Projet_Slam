@@ -24,6 +24,10 @@ $choreos = $req->fetchAll(PDO::FETCH_ASSOC);
         <a href="ajouter_chore.php" class="btn btn-primary btn-lg">
             + Ajouter une chorégraphie
         </a>
+        <a href="reglages.php" class="btn btn-light">
+            <i class="fa-solid fa-gear"></i>
+        </a>
+
     </div>
 
     <hr>
